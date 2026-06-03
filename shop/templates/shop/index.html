@@ -1,0 +1,128 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <span class="hero-subtitle">INTRODUCING SILVÉRA & GOLD</span>
+        <h1 class="hero-title">Timeless Jewelry For Modern Elegance</h1>
+        <p class="hero-description">Discover curated collections handcrafted in 18k solid gold, fine sterling silver, and ethically sourced gemstones.</p>
+        <div class="hero-cta-group">
+            <a href="{% url 'catalog' %}" class="btn btn-gold">Explore Collection</a>
+            <a href="{% url 'about' %}" class="btn btn-outline">Our Philosophy</a>
+        </div>
+    </div>
+</section>
+
+<!-- Category Showcase -->
+<section class="section category-showcase">
+    <div class="container">
+        <div class="section-header text-center">
+            <span class="section-tag">SHOP BY COLLECTION</span>
+            <h2 class="section-title">Curated Categories</h2>
+            <div class="divider"></div>
+        </div>
+        
+        <div class="category-grid">
+            <a href="{% url 'catalog' %}?category=Necklaces" class="category-card">
+                <div class="category-bg" style="background-image: url('{% static '1-Necklace-RG.webp' %}');"></div>
+                <div class="category-content">
+                    <h3>Necklaces</h3>
+                    <span class="category-link">Shop Collection &rarr;</span>
+                </div>
+            </a>
+            
+            <a href="{% url 'catalog' %}?category=Rings" class="category-card">
+                <div class="category-bg" style="background-image: url('{% static 'ring.webp' %}');"></div>
+                <div class="category-content">
+                    <h3>Rings</h3>
+                    <span class="category-link">Shop Collection &rarr;</span>
+                </div>
+            </a>
+            
+            <a href="{% url 'catalog' %}?category=Pendants" class="category-card">
+                <div class="category-bg" style="background-image: url('{% static 'pendal2.webp' %}');"></div>
+                <div class="category-content">
+                    <h3>Pendants</h3>
+                    <span class="category-link">Shop Collection &rarr;</span>
+                </div>
+            </a>
+            
+            <a href="{% url 'catalog' %}?category=Earrings" class="category-card">
+                <div class="category-bg" style="background-image: url('{% static 'orbitsparkle.webp' %}');"></div>
+                <div class="category-content">
+                    <h3>Earrings</h3>
+                    <span class="category-link">Shop Collection &rarr;</span>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Products Section -->
+<section class="section featured-products bg-cream">
+    <div class="container">
+        <div class="section-header text-center">
+            <span class="section-tag">THE TISHYYA SIGNATURE</span>
+            <h2 class="section-title">Featured Creations</h2>
+            <div class="divider"></div>
+        </div>
+        
+        <div class="product-grid">
+            {% for product in featured_products %}
+            <div class="product-card">
+                <!-- Image & Wishlist Corner Button -->
+                <div class="product-image-wrapper">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
+                    
+                    <!-- Wishlist Button with Heart SVG -->
+                    <a href="{% url 'wishlist_toggle' product.id %}?next=indexpage" class="card-wishlist-btn" title="Add to Wishlist">
+                        <!-- Standard Heart SVG -->
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                    </a>
+                </div>
+                
+                <!-- Product Details -->
+                <div class="product-info text-center">
+                    <span class="product-category">{{ product.category }}</span>
+                    <h3 class="product-title">
+                        <a href="{% url 'product_detail' product.id %}">{{ product.name }}</a>
+                    </h3>
+                    <p class="product-price">₹{{ product.price }}</p>
+                    
+                    <div class="product-actions-hover">
+                        <form action="{% url 'cart_add' product.id %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="quantity" value="1">
+                            <button type="submit" class="btn btn-small-gold">Add to Bag</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p class="text-center w-100">No products available. Please seed the database first.</p>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="{% url 'catalog' %}" class="btn btn-gold">View All Jewelry</a>
+        </div>
+    </div>
+</section>
+
+<!-- Brand Philosophy Section -->
+<section class="section philosophy-banner">
+    <div class="container text-center max-w-md">
+        <span class="section-tag-gold">HANDMADE CRAFTSMANSHIP</span>
+        <h2 class="philosophy-title">Designed with Soul, Worn with Pride</h2>
+        <p class="philosophy-text">
+            Every piece at Tishyya is meticulously designed by in-house artisans who combine traditional gold-smithing techniques with modern architectural designs. We utilize 100% recycled metals and responsibly sourced gemstones to protect the planet while celebrating its natural beauty.
+        </p>
+        <a href="{% url 'about' %}" class="btn-underline">Read Our Design Journey</a>
+    </div>
+</section>
+{% endblock %}

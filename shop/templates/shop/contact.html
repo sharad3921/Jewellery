@@ -1,0 +1,97 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="contact-page-header">
+    <div class="container text-center">
+        <span class="contact-subtitle">GET IN TOUCH</span>
+        <h1 class="contact-title">Contact Our Concierge</h1>
+        <p class="contact-desc">We are here to assist you with order inquiries, product details, custom requests, or styling advice.</p>
+    </div>
+</section>
+
+<div class="contact-container container">
+    <div class="contact-layout">
+        <!-- Left: Contact Details -->
+        <div class="contact-details">
+            
+            <div class="contact-info-list">
+                <div class="contact-info-item">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    <div>
+                        <h4>Address</h4>
+                        <p>Ahmedabad, Gujarat India</p>
+                    </div>
+                </div>
+
+                <div class="contact-info-item">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                    </svg>
+                    <div>
+                        <h4>Concierge Phone</h4>
+                        <p>+91 84859 51807</p>
+                    </div>
+                </div>
+
+                <div class="contact-info-item">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    <div>
+                        <h4>Email Relations</h4>
+                        <p>tishyya@gmail.com</p>
+                    </div>
+                </div>
+            </div>
+
+
+        <!-- Right: Contact Message Form -->
+        <div class="contact-form-wrapper">
+            <h3 class="contact-section-title">Send Us a Message</h3>
+            <div class="divider-left"></div>
+            
+            <form action="{% url 'contact' %}" method="POST" class="contact-form">
+                {% csrf_token %}
+                
+                <div class="form-field">
+                    <label for="id_name">Your Name</label>
+                    {{ form.name }}
+                    {% if form.name.errors %}
+                        <p class="field-error">{{ form.name.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <div class="form-field">
+                    <label for="id_email">Your Email Address</label>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                        <p class="field-error">{{ form.email.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <div class="form-field">
+                    <label for="id_subject">Subject</label>
+                    {{ form.subject }}
+                    {% if form.subject.errors %}
+                        <p class="field-error">{{ form.subject.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <div class="form-field">
+                    <label for="id_message">Message Details</label>
+                    {{ form.message }}
+                    {% if form.message.errors %}
+                        <p class="field-error">{{ form.message.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <button type="submit" class="btn btn-gold btn-large w-100">Submit Message</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

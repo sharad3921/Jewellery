@@ -1,0 +1,95 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="section cart-page">
+    <div class="container">
+        <h1 class="cart-heading">Your Shopping Bag</h1>
+        <div class="divider-left"></div>
+
+        {% if cart.items.count > 0 %}
+        <div class="cart-layout">
+            <!-- Left: Table of Items -->
+            <div class="cart-items-wrapper">
+                <table class="cart-table">
+                    <thead>
+                        <tr>
+                            <th>Product Details</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in cart.items.all %}
+                        <tr>
+                            <td class="cart-product-cell">
+                                <div class="cart-item-info">
+                                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="cart-item-image">
+                                    <div>
+                                        <h4 class="cart-item-title"><a href="{% url 'product_detail' item.product.id %}">{{ item.product.name }}</a></h4>
+                                        <p class="cart-item-category">{{ item.product.category }}</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>₹{{ item.product.price }}</td>
+                            <td>
+                                <!-- Quantity Update Form -->
+                                <form action="{% url 'cart_update' item.product.id %}" method="POST" class="cart-qty-form">
+                                    {% csrf_token %}
+                                    <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="{{ item.product.stock }}" class="qty-input-small">
+                                    <button type="submit" class="qty-update-btn">Update</button>
+                                </form>
+                            </td>
+                            <td class="cart-item-subtotal">₹{{ item.subtotal }}</td>
+                            <td>
+                                <a href="{% url 'cart_remove' item.product.id %}" class="cart-remove-link">&times; Remove</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="cart-actions-row">
+                    <a href="{% url 'catalog' %}" class="btn btn-outline">&larr; Continue Shopping</a>
+                </div>
+            </div>
+
+            <!-- Right: Summary Card -->
+            <div class="cart-summary-wrapper">
+                <div class="summary-card">
+                    <h3 class="summary-title">Order Summary</h3>
+                    <div class="divider-left"></div>
+                    
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <span>₹{{ cart.total_price }}</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Complimentary Shipping</span>
+                        <span>FREE</span>
+                    </div>
+                    
+                    <div class="divider-left mt-2 mb-2"></div>
+                    
+                    <div class="summary-row total-row">
+                        <span>Total</span>
+                        <span class="total-price">₹{{ cart.total_price }}</span>
+                    </div>
+                    
+                    <p class="summary-disclaimer">Tax calculated at checkout. Safe and secure SSL encrypted checkout checkout.</p>
+                    
+                    <a href="{% url 'checkout' %}" class="btn btn-gold btn-large text-center w-100 block">Proceed to Checkout</a>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="empty-cart-view text-center">
+            <h2>Your Shopping Bag is Empty</h2>
+            <p>Explore our timeless jewelry and add items to your bag.</p>
+            <a href="{% url 'catalog' %}" class="btn btn-gold">Explore Collections</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

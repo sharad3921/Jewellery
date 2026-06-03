@@ -1,0 +1,64 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="section confirmation-page bg-cream">
+    <div class="container max-w-md">
+        <div class="confirmation-card text-center">
+            <!-- Success Icon -->
+            <div class="success-icon-wrapper">
+                <svg fill="none" viewBox="0 0 24 24" stroke="#c5a059" width="50" height="50">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </div>
+            
+            <h1 class="confirmation-title">Thank You For Your Order</h1>
+            <p class="confirmation-subtitle">Your order has been placed and is currently being prepared for shipping.</p>
+            <span class="order-tag">Order ID: #{{ order.id }}</span>
+            
+            <div class="divider mt-3 mb-3"></div>
+            
+            <!-- Shipping details summaries -->
+            <div class="confirmation-details-grid text-left">
+                <div class="detail-item">
+                    <h4>Delivery To:</h4>
+                    <p>{{ order.first_name }} {{ order.last_name }}</p>
+                    <p>{{ order.address }}</p>
+                    <p>{{ order.city }}, {{ order.postal_code }}</p>
+                    <p>{{ order.country }}</p>
+                </div>
+                <div class="detail-item">
+                    <h4>Contact Info:</h4>
+                    <p>Email: {{ order.email }}</p>
+                    <p>Phone: {{ order.phone }}</p>
+                    <br>
+                    <h4>Placed On:</h4>
+                    <p>{{ order.created_at|date:"F d, Y H:i" }}</p>
+                </div>
+            </div>
+            
+            <div class="divider mt-3 mb-3"></div>
+            
+            <!-- Order Items Summary Table -->
+            <h4 class="text-left mb-2">Order Items</h4>
+            <div class="confirmation-items-list">
+                {% for item in order.items.all %}
+                <div class="conf-item-row text-left">
+                    <span>{{ item.product.name }} (Qty: {{ item.quantity }})</span>
+                    <span class="price-val">₹{{ item.subtotal }}</span>
+                </div>
+                {% endfor %}
+                <div class="divider-thin mt-2 mb-2"></div>
+                <div class="conf-item-row text-left font-bold">
+                    <span>Total Amount Paid (COD)</span>
+                    <span class="price-val text-gold">₹{{ order.total_price }}</span>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <a href="{% url 'catalog' %}" class="btn btn-gold btn-large">Continue Shopping</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

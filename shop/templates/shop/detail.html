@@ -1,0 +1,143 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="detail-page-container container">
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs">
+        <a href="{% url 'indexpage' %}">Home</a> &gt; 
+        <a href="{% url 'catalog' %}">Collections</a> &gt; 
+        <a href="{% url 'catalog' %}?category={{ product.category }}">{{ product.category }}</a> &gt; 
+        <span>{{ product.name }}</span>
+    </div>
+
+    <div class="detail-product-layout">
+        <!-- Left: Image Gallery -->
+        <div class="product-gallery">
+            <div class="main-image-card">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" id="main-product-image">
+            </div>
+        </div>
+
+        <!-- Right: Product Details -->
+        <div class="product-details-content">
+            <span class="detail-category">{{ product.category }}</span>
+            <h1 class="detail-title">{{ product.name }}</h1>
+            <p class="detail-price">₹{{ product.price }}</p>
+            
+            <div class="stock-status {% if product.stock > 0 %}in-stock{% else %}out-of-stock{% endif %}">
+                {% if product.stock > 0 %}
+                    <span class="status-dot"></span> In Stock ({{ product.stock }} available)
+                {% else %}
+                    <span class="status-dot"></span> Sold Out
+                {% endif %}
+            </div>
+
+            <div class="divider-left"></div>
+
+            <p class="detail-description">{{ product.description }}</p>
+
+            <!-- Actions form -->
+            {% if product.stock > 0 %}
+            <form action="{% url 'cart_add' product.id %}" method="POST" class="detail-action-form">
+                {% csrf_token %}
+                <div class="quantity-selector-wrapper">
+                    <label for="quantity" class="quantity-label">Quantity</label>
+                    <div class="quantity-control-group">
+                        <button type="button" class="qty-btn minus-btn" onclick="decrementQty()">-</button>
+                        <input type="number" name="quantity" id="quantity-input" value="1" min="1" max="{{ product.stock }}" class="qty-input">
+                        <button type="button" class="qty-btn plus-btn" onclick="incrementQty({{ product.stock }})">+</button>
+                    </div>
+                </div>
+
+                <div class="detail-buttons-row">
+                    <button type="submit" class="btn btn-gold btn-large flex-grow">Add to Shopping Bag</button>
+                    
+                    <!-- Toggle Wishlist -->
+                    <a href="{% url 'wishlist_toggle' product.id %}?next={% url 'product_detail' product.id %}" class="btn-wishlist-detail" title="Add to Wishlist">
+                        <svg 
+                             {% if is_in_wishlist %}fill="#c5a059" stroke="#c5a059" class="heart-icon active"{% else %}fill="none" stroke="currentColor" class="heart-icon"{% endif %} 
+                             viewBox="0 0 24 24" width="22" height="22">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                    </a>
+                </div>
+            </form>
+            {% else %}
+            <button class="btn btn-disabled btn-large" disabled>Temporarily Unavailable</button>
+            {% endif %}
+
+            <!-- Extra Details Accordion Mockup -->
+            <div class="product-info-tabs">
+                <div class="tab-item">
+                    <h4 class="tab-header" onclick="toggleTab('tab-shipping')">Shipping & Returns <span class="tab-icon">+</span></h4>
+                    <div class="tab-body" id="tab-shipping">
+                        <p>We offer complimentary secure shipping worldwide. All deliveries require a signature. Returns or exchanges are accepted within 14 days of delivery.</p>
+                    </div>
+                </div>
+                <div class="tab-item">
+                    <h4 class="tab-header" onclick="toggleTab('tab-materials')">Materials & Care <span class="tab-icon">+</span></h4>
+                    <div class="tab-body" id="tab-materials">
+                        <p>Our jewelry is crafted from certified metals and ethically mined stones. Clean with a soft lint-free cloth and keep away from moisture and direct chemical sprays.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Creations -->
+    <section class="related-creations-section section">
+        <div class="section-header text-center">
+            <span class="section-tag">COMPLEMENTARY PIECES</span>
+            <h2 class="section-title">Related Creations</h2>
+            <div class="divider"></div>
+        </div>
+        
+        <div class="product-grid">
+            {% for item in related_products %}
+            <div class="product-card">
+                <div class="product-image-wrapper">
+                    <img src="{{ item.image.url }}" alt="{{ item.name }}" class="product-image">
+                </div>
+                <div class="product-info text-center">
+                    <span class="product-category">{{ item.category }}</span>
+                    <h3 class="product-title">
+                        <a href="{% url 'product_detail' item.id %}">{{ item.name }}</a>
+                    </h3>
+                    <p class="product-price">₹{{ item.price }}</p>
+                </div>
+            </div>
+            {% empty %}
+            <p class="text-center w-100">No related pieces found.</p>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+
+<script>
+    function incrementQty(maxVal) {
+        var input = document.getElementById('quantity-input');
+        var val = parseInt(input.value);
+        if (val < maxVal) {
+            input.value = val + 1;
+        }
+    }
+    
+    function decrementQty() {
+        var input = document.getElementById('quantity-input');
+        var val = parseInt(input.value);
+        if (val > 1) {
+            input.value = val - 1;
+        }
+    }
+
+    function toggleTab(tabId) {
+        var tab = document.getElementById(tabId);
+        if (tab.style.display === 'block') {
+            tab.style.display = 'none';
+        } else {
+            tab.style.display = 'block';
+        }
+    }
+</script>
+{% endblock %}

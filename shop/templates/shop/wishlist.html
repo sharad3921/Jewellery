@@ -1,0 +1,57 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="section wishlist-page">
+    <div class="container">
+        <h1 class="wishlist-heading">My Wishlist</h1>
+        <div class="divider-left"></div>
+
+        {% if wishlist.items.count > 0 %}
+        <div class="product-grid mt-4">
+            {% for item in wishlist.items.all %}
+            <div class="product-card">
+                <div class="product-image-wrapper">
+                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="product-image">
+                    
+                    <!-- Remove from wishlist (toggles it off) -->
+                    <a href="{% url 'wishlist_toggle' item.product.id %}?next={% url 'wishlist_detail' %}" class="card-wishlist-btn active" title="Remove from Wishlist">
+                        <!-- Filled Gold Heart SVG -->
+                        <svg fill="#c5a059" stroke="#c5a059" viewBox="0 0 24 24" width="20" height="20">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                    </a>
+                </div>
+                
+                <div class="product-info text-center">
+                    <span class="product-category">{{ item.product.category }}</span>
+                    <h3 class="product-title">
+                        <a href="{% url 'product_detail' item.product.id %}">{{ item.product.name }}</a>
+                    </h3>
+                    <p class="product-price">₹{{ item.product.price }}</p>
+                    
+                    <div class="product-actions-row-grid mt-3">
+                        <form action="{% url 'cart_add' item.product.id %}" method="POST" class="d-inline">
+                            {% csrf_token %}
+                            <input type="hidden" name="quantity" value="1">
+                            <button type="submit" class="btn btn-small-gold btn-full">Add to Bag</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-wishlist-view text-center">
+            <!-- Requested heart SVG icon in large size -->
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" width="60" height="60" class="empty-wishlist-icon">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            </svg>
+            <h2>Your Wishlist is Empty</h2>
+            <p>Save items you love to your wishlist to view them here later.</p>
+            <a href="{% url 'catalog' %}" class="btn btn-gold">Browse Catalog</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

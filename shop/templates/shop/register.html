@@ -1,0 +1,94 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="section auth-page bg-cream">
+    <div class="auth-container-premium">
+        <div class="auth-split-card">
+            <!-- Left panel: Visual Design Panel -->
+            <div class="auth-visual-panel" style="background-image: url('{% static 'ring.webp' %}');">
+                <div class="auth-visual-overlay"></div>
+                <div class="auth-visual-content">
+                    <span class="auth-visual-tag">THE TISHYYA SIGNATURE</span>
+                    <h2 class="auth-visual-title">Begin Your Journey Into Luxury</h2>
+                    <p class="auth-visual-desc">Create an account to gain early access to special collections, save products on your wishlist, and track your orders.</p>
+                </div>
+            </div>
+
+            <!-- Right panel: Credentials Form -->
+            <div class="auth-form-panel">
+                <h2 class="auth-title">Create Account</h2>
+                <p class="auth-subtitle">Register to save wishlist items and checkout faster.</p>
+                <div class="divider-left"></div>
+
+                <form action="{% url 'register' %}" method="POST" class="auth-form">
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                    <div class="form-errors">
+                        {% for error in form.non_field_errors %}
+                            <p class="error-msg">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <div class="form-field">
+                        <label for="id_username">Username</label>
+                        {{ form.username }}
+                        {% if form.username.errors %}
+                            <p class="field-error">{{ form.username.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-row-two-col">
+                        <div class="form-field">
+                            <label for="id_first_name">First Name</label>
+                            {{ form.first_name }}
+                            {% if form.first_name.errors %}
+                                <p class="field-error">{{ form.first_name.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="form-field">
+                            <label for="id_last_name">Last Name</label>
+                            {{ form.last_name }}
+                            {% if form.last_name.errors %}
+                                <p class="field-error">{{ form.last_name.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="id_email">Email Address</label>
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                            <p class="field-error">{{ form.email.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-field">
+                        <label for="id_password">Password</label>
+                        {{ form.password }}
+                        {% if form.password.errors %}
+                            <p class="field-error">{{ form.password.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-field">
+                        <label for="id_confirm_password">Confirm Password</label>
+                        {{ form.confirm_password }}
+                        {% if form.confirm_password.errors %}
+                            <p class="field-error">{{ form.confirm_password.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <button type="submit" class="btn btn-gold btn-large w-100 mt-2">Register Account</button>
+                </form>
+
+                <div class="auth-footer mt-4">
+                    <p>Already have an account? <a href="{% url 'login' %}" class="auth-link">Sign In</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,109 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="catalog-page-header">
+    <div class="container text-center">
+        <span class="catalog-subtitle">OUR COLLECTIONS</span>
+        <h1 class="catalog-title">Exquisite Jewelry Catalog</h1>
+        <p class="catalog-desc">Browse our curated selections of handcrafted rings, necklaces, pendants, and earrings.</p>
+    </div>
+</section>
+
+<div class="catalog-container container">
+    <!-- Sidebar Filters -->
+    <aside class="catalog-sidebar">
+        <h3 class="filter-heading">Filter Selection</h3>
+        <div class="divider-left"></div>
+        
+        <form action="{% url 'catalog' %}" method="GET" class="filter-form">
+            <!-- Retain current search query if exists -->
+            {% if query %}
+                <input type="hidden" name="q" value="{{ query }}">
+            {% endif %}
+
+            <!-- Category Filter -->
+            <div class="filter-group">
+                <label class="filter-label">Category</label>
+                <div class="category-filter-links">
+                    <a href="{% url 'catalog' %}{% if query %}?q={{ query }}{% endif %}" class="cat-link {% if not selected_category %}active{% endif %}">
+                        All Items
+                    </a>
+                    {% for cat in categories %}
+                        <a href="{% url 'catalog' %}?category={{ cat }}{% if query %}&q={{ query }}{% endif %}" class="cat-link {% if selected_category == cat %}active{% endif %}">
+                            {{ cat }}
+                        </a>
+                    {% endfor %}
+                </div>
+                <!-- Hidden input to preserve selected category in form submit -->
+                <input type="hidden" name="category" value="{{ selected_category }}">
+            </div>
+
+            <!-- Price Range Filter -->
+            <div class="filter-group">
+                <label class="filter-label">Price Range (₹)</label>
+                <div class="price-input-range">
+                    <input type="number" name="price_min" placeholder="Min" value="{{ price_min }}" min="0" class="price-input">
+                    <span class="range-to">to</span>
+                    <input type="number" name="price_max" placeholder="Max" value="{{ price_max }}" min="0" class="price-input">
+                </div>
+            </div>
+
+            <div class="filter-actions">
+                <button type="submit" class="btn btn-gold btn-full">Apply Filters</button>
+                <a href="{% url 'catalog' %}" class="btn btn-outline btn-full text-center">Clear All</a>
+            </div>
+        </form>
+    </aside>
+
+    <!-- Product Grid & Search Results -->
+    <main class="catalog-main">
+        {% if query %}
+            <div class="search-results-info">
+                <p>Showing search results for "<strong>{{ query }}</strong>" in {% if selected_category %}{{ selected_category }}{% else %}all categories{% endif %}:</p>
+            </div>
+        {% endif %}
+        
+        <div class="product-grid">
+            {% for product in products %}
+            <div class="product-card">
+                <div class="product-image-wrapper">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
+                    
+                    <!-- Toggle Wishlist (using same page redirect or back to catalog with query parameters) -->
+                    <a href="{% url 'wishlist_toggle' product.id %}?next={% url 'catalog' %}%3Fq%3D{{ query }}%26category%3D{{ selected_category }}%26price_min%3D{{ price_min }}%26price_max%3D{{ price_max }}" class="card-wishlist-btn" title="Toggle Wishlist">
+                        <!-- Standard Heart SVG with dynamic fill based on wishlist state -->
+                        <svg 
+                             {% if product.id in wishlist_product_ids %}fill="#c5a059" stroke="#c5a059" class="heart-icon active"{% else %}fill="none" stroke="currentColor" class="heart-icon"{% endif %} 
+                             viewBox="0 0 24 24" width="20" height="20">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                    </a>
+                </div>
+                
+                <div class="product-info text-center">
+                    <span class="product-category">{{ product.category }}</span>
+                    <h3 class="product-title">
+                        <a href="{% url 'product_detail' product.id %}">{{ product.name }}</a>
+                    </h3>
+                    <p class="product-price">₹{{ product.price }}</p>
+                    
+                    <div class="product-actions-hover">
+                        <form action="{% url 'cart_add' product.id %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="quantity" value="1">
+                            <button type="submit" class="btn btn-small-gold">Add to Bag</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="no-products-found w-100 text-center">
+                <p>No products match your filter criteria.</p>
+                <a href="{% url 'catalog' %}" class="btn btn-gold mt-3">Reset All Filters</a>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+</div>
+{% endblock %}

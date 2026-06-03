@@ -1,0 +1,75 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="about-hero">
+    <div class="about-hero-overlay"></div>
+    <div class="about-hero-content text-center">
+        <span class="about-subtitle">OUR JOURNEY</span>
+        <h1 class="about-title">The Story of Tishyya</h1>
+        <div class="divider"></div>
+    </div>
+</section>
+
+<section class="section about-intro container">
+    <div class="about-grid">
+        <div class="about-text-column">
+            <span class="section-tag-gold">ESTABLISHED IN 2020</span>
+            <h2 class="about-heading">Redefining Fine Jewelry</h2>
+            <p class="about-paragraph">
+                Tishyya was born out of a desire to create jewelry that speaks to the soul. We believe that fine jewelry is more than just an accessory—it is a form of self-expression, a carrier of memories, and a reflection of personal style. Our collections are designed for the modern individual who values craftsmanship, detail, and timeless aesthetics.
+            </p>
+            <p class="about-paragraph">
+                Every piece in our catalog is meticulously curated, designed, and finished by skilled craftsmen. From the selection of premium-grade gold and sterling silver to the setting of precious gemstones, we maintain an uncompromising standard of quality.
+            </p>
+        </div>
+        <div class="about-image-column">
+            <!-- Utilizing our seed image as an elegant showcase -->
+            <img src="{% static 'nentwin set.webp' %}" alt="Jewelry Crafting" class="about-image">
+        </div>
+    </div>
+</section>
+
+<section class="section about-values bg-cream">
+    <div class="container">
+        <div class="section-header text-center">
+            <span class="section-tag">OUR CORE PILLARS</span>
+            <h2 class="section-title">Values We Shine By</h2>
+            <div class="divider"></div>
+        </div>
+
+        <div class="values-grid">
+            <div class="value-card">
+                <span class="value-number">01</span>
+                <h3>Exquisite Craftsmanship</h3>
+                <p>We blend centuries-old traditional jewelry-making techniques with modern, precise architectural designs to create silhouettes that stand out.</p>
+            </div>
+            
+            <div class="value-card">
+                <span class="value-number">02</span>
+                <h3>Ethically Sourced</h3>
+                <p>We are committed to sustainability. 100% of our precious metals are recycled, and every diamond or gemstone is sourced from conflict-free mines.</p>
+            </div>
+            
+            <div class="value-card">
+                <span class="value-number">03</span>
+                <h3>Accessible Luxury</h3>
+                <p>By operating purely online and designing in-house, we eliminate traditional retail markups, offering premium quality without the premium price tag.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section about-team container text-center">
+    <div class="max-w-md">
+        <span class="section-tag-gold">MEET THE FOUNDERS</span>
+        <h2 class="about-heading">Driven by Passion</h2>
+        <p class="about-paragraph">
+            Tishyya was founded by a team of design enthusiasts and gemologists who shared a vision of creating a transparent, luxury-focused, and sustainable jewelry brand. Our studio operates from BKC, Mumbai, where we continuously design collections that blend Eastern elegance with Western minimalism.
+        </p>
+        <div class="founders-img-row">
+            <img src="{% static 'logo.avif' %}" alt="Tishyya Brand Seal" class="brand-seal">
+        </div>
+    </div>
+</section>
+{% endblock %}

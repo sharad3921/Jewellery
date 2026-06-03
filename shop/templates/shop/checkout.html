@@ -1,0 +1,145 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="section checkout-page">
+    <div class="container">
+        <h1 class="checkout-heading">Shipping & Checkout</h1>
+        <div class="divider-left"></div>
+
+        <div class="checkout-layout">
+            <!-- Left: Shipping Address Form -->
+            <div class="checkout-form-wrapper">
+                <h3 class="checkout-section-title">Delivery Details</h3>
+                <form action="{% url 'checkout' %}" method="POST" class="checkout-form">
+                    {% csrf_token %}
+                    
+                    {% if form.non_field_errors %}
+                    <div class="form-errors">
+                        {% for error in form.non_field_errors %}
+                            <p class="error-msg">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    
+                    <div class="form-row-two-col">
+                        <div class="form-field">
+                            <label for="id_first_name">First Name</label>
+                            {{ form.first_name }}
+                            {% if form.first_name.errors %}
+                                <p class="field-error">{{ form.first_name.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="form-field">
+                            <label for="id_last_name">Last Name</label>
+                            {{ form.last_name }}
+                            {% if form.last_name.errors %}
+                                <p class="field-error">{{ form.last_name.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="form-row-two-col">
+                        <div class="form-field">
+                            <label for="id_email">Email Address</label>
+                            {{ form.email }}
+                            {% if form.email.errors %}
+                                <p class="field-error">{{ form.email.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="form-field">
+                            <label for="id_phone">Phone Number</label>
+                            {{ form.phone }}
+                            {% if form.phone.errors %}
+                                <p class="field-error">{{ form.phone.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="id_address">Street Address</label>
+                        {{ form.address }}
+                        {% if form.address.errors %}
+                            <p class="field-error">{{ form.address.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-row-three-col">
+                        <div class="form-field">
+                            <label for="id_city">City</label>
+                            {{ form.city }}
+                            {% if form.city.errors %}
+                                <p class="field-error">{{ form.city.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="form-field">
+                            <label for="id_postal_code">Postal Code</label>
+                            {{ form.postal_code }}
+                            {% if form.postal_code.errors %}
+                                <p class="field-error">{{ form.postal_code.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="form-field">
+                            <label for="id_country">Country</label>
+                            {{ form.country }}
+                            {% if form.country.errors %}
+                                <p class="field-error">{{ form.country.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="payment-method-mock">
+                        <h4 class="payment-title">Payment Method</h4>
+                        <div class="payment-option active">
+                            <input type="radio" id="cod" name="payment_method" checked>
+                            <label for="cod">Cash on Delivery (COD) / Pay on Receipt</label>
+                        </div>
+                        <p class="payment-desc">Standard shipping is secure. Your delivery will require a signature. Pay with cash or card upon receiving your order.</p>
+                    </div>
+
+                    <button type="submit" class="btn btn-gold btn-large w-100 mt-4">Place Secure Order</button>
+                </form>
+            </div>
+
+            <!-- Right: Order Items Summary -->
+            <div class="checkout-summary-wrapper">
+                <div class="summary-card">
+                    <h3 class="summary-title">Review Your Order</h3>
+                    <div class="divider-left"></div>
+                    
+                    <div class="checkout-items-list">
+                        {% for item in cart.items.all %}
+                        <div class="checkout-item-row">
+                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="checkout-item-thumb">
+                            <div class="checkout-item-details">
+                                <h4 class="item-name">{{ item.product.name }}</h4>
+                                <span class="item-qty-price">Qty: {{ item.quantity }} &times; ₹{{ item.product.price }}</span>
+                            </div>
+                            <span class="item-subtotal-price">₹{{ item.subtotal }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="divider-left mt-3 mb-3"></div>
+
+                    <div class="summary-row">
+                        <span>Items Subtotal</span>
+                        <span>₹{{ cart.total_price }}</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Delivery Fee</span>
+                        <span>FREE</span>
+                    </div>
+
+                    <div class="divider-left mt-2 mb-2"></div>
+
+                    <div class="summary-row total-row">
+                        <span>Total Due</span>
+                        <span class="total-price">₹{{ cart.total_price }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

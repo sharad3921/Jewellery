@@ -1,0 +1,20 @@
+{% extends 'shop/base.html' %}
+
+{% block content %}
+<section class="section product-delete-page bg-cream">
+    <div class="container max-w-sm">
+        <div class="form-card text-center">
+            <h2 class="form-card-title text-red">Confirm Deletion</h2>
+            <div class="divider"></div>
+
+            <p class="mb-4">Are you absolutely sure you want to permanently delete the jewelry product "<strong>{{ product.name }}</strong>"? This action cannot be undone.</p>
+
+            <form method="POST" class="crud-delete-form">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-red btn-large w-100">Permanently Delete</button>
+                <a href="{% url 'manage_products' %}" class="btn btn-outline btn-large w-100 text-center block mt-2">Cancel & Return</a>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}
